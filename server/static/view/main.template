@@ -1,0 +1,10 @@
+                <!-- Intro -->
+                    <section id="intro" class="wrapper style1 fullscreen fade-up inactive">
+                        <div class="inner">
+                            <h1>WikiSearch</h1>
+                            <p>Make your Github and Github enterprise repository wikis searchable!</p>
+                            <ul class="actions">
+                                <li><a href="#/newrepo" class="button scrolly">Register new repo!</a></li>
+                            </ul>
+                        </div>
+                    </section>

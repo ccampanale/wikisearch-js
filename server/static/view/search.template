@@ -1,0 +1,25 @@
+                <!-- repo search -->
+                    <section id="<%= repoID %>_search" class="wrapper style3 fullscreen fade-up inactive">
+                        <div class="inner">
+                            <h1><%= repoName %></h1>
+                            <p><b>URL:</b> <%= repoUrl %></p>
+                            <p><b>Terms:</b> <%= terms %></p>
+                            <div class="features inactive">
+                            <% results.forEach(function(result){ %>
+                                <section>
+                                    <span class="icon major fa-github"></span>
+                                    <h3><a href="<%= result.href_raw %>" target="_new"><%= result.file %></a></h3>
+                                    <p><a href="<%= result.href %>" target="_new"><%= result.href %></a></p>
+                                    <pre>
+                                        <code>
+<%= result.line %>: <%= result.text %>
+                                        </code>
+                                    </pre>
+                                </section>
+                            <% }); %>
+                            </div>
+                            <ul class="actions">
+                                <li><a href="#/repos/<%= repoID %>" class="button">Search again</a></li>
+                            </ul>
+                        </div>
+                    </section>

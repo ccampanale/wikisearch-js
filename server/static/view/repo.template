@@ -1,0 +1,42 @@
+                <!-- newsearch -->
+                    <section id="<%= repoID %>_section" class="wrapper style1 fullscreen fade-up inactive">
+                        <div class="inner">
+                            <h1><%= repoName %></h1>
+                            <p><%= url %></p>
+                            <div class="split style1">
+                                <section>
+                                    <form method="get" action="#/repos/<%= repoID %>/">
+                                        <div class="field first">
+                                            <label for="terms">Search for...</label>
+                                            <input type="text" name="terms" id="terms" />
+                                        </div>
+                                        <ul class="actions">
+                                            <li><a href="#/repos/<%= repoID %>/search" class="button submit" id="search">Search</a></li>
+                                            <li><a href="#/repos/<%= repoID %>/delete" class="button submit" id="delete">Delete</a></li>
+                                            <li><a href="#/repos/<%= repoID %>/update" class="button submit" id="update">Update</a></li>
+                                            <input type="checkbox" id="alwaysupdate" name="alwaysupdate" checked>
+                                            <label for="alwaysupdate">Always update</label>
+                                        </ul>
+                                    </form>
+                                </section>
+                                <section>
+                                    <ul class="contact">
+                                        <li>
+                                            <h3><%= repoName %></h3>
+                                            <span><%= repoID %></span>
+                                        </li>
+                                        <li>
+                                            <h3>URL</h3>
+                                            <a href="#"><%= url %></a>
+                                        </li>
+                                        <li>
+                                            <h3>Last Commit</h3>
+                                            <span><%= last_commit.date %></span>
+                                            <span><%= last_commit.author %></span>
+                                            <span><%= last_commit.message %></span>
+                                        </li>
+                                    </ul>
+                                </section>
+                            </div>
+                        </div>
+                    </section>

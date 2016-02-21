@@ -1,0 +1,11 @@
+                <!-- Intro -->
+                    <section id="notfound" class="wrapper style1 fullscreen fade-up inactive">
+                        <div class="inner">
+                            <h1>We can't find: `<%= repoID %>`</h1>
+                            <p>Opps! The repository you requested doesn't appear to be registered...</p>
+                            <p>Please chose a registered repository in the menu on the left or click below to register a new repo.</p>
+                            <ul class="actions">
+                                <li><a href="#/newrepo" class="button scrolly">Register new repo!</a></li>
+                            </ul>
+                        </div>
+                    </section>

@@ -1,0 +1,45 @@
+                <!-- new repo -->
+                    <section id="newrepo_section" class="wrapper style1 fullscreen fade-up inactive">
+                        <div class="inner">
+                            <h2>Register new repo</h2>
+                            <p>Register a new repository from Github or Github Enterprise to enable searching that repository's wiki documentation. Simply provide a URL to the repo, an Oauth token with access to clone the repo and fetch updates, and a name to refernce the repo.</p>
+                            <div class="split style1">
+                                <section>
+                                    <form method="post" action="#/newrepo">
+                                        <div class="field first">
+                                            <label for="name">Name</label>
+                                            <input type="text" name="name" id="name" />
+                                            <input type="hidden" name="id" id="id" value="">
+                                        </div>
+                                        <div class="field">
+                                            <label for="email">URL  <i id="url_test" class="icon minor fa-square-o"></i></label>
+                                            <input type="text" name="email" id="url" />
+                                        </div>
+                                        <div class="field" id="token_input">
+                                            <label for="email">Token</label>
+                                            <input type="text" name="email" id="token" />
+                                        </div>
+                                        <ul class="actions">
+                                            <li><a href="#/newrepo" class="button submit" target="_new">Register</a></li>
+                                        </ul>
+                                    </form>
+                                </section>
+                                <section>
+                                    <ul class="contact">
+                                        <li>
+                                            <h3>New Repo ID</h3>
+                                            <span id="repoId"></span>
+                                        </li>
+                                        <li>
+                                            <h3>URL</h3>
+                                            <a id="repoUrl" href="#"></a>
+                                        </li>
+                                        <li>
+                                            <h3>Token</h3>
+                                            <span id="repoToken"></span>
+                                        </li>
+                                    </ul>
+                                </section>
+                            </div>
+                        </div>
+                    </section>

@@ -1,0 +1,9 @@
+                <div id="alertWrapper">
+                    <div id="alertBox" class="">
+                        <strong><%= title %></strong>
+                        <hr>
+                        <p><%= message %></p>
+                        <br>
+                        <span><% if(cancel){ %><a href="#" class="button" id="alertCancel">Cancel</a><% } %><a href="#" class="button" id="alertOk">OK</a></span>
+                    </div>
+                </div>

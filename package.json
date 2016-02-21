@@ -1,0 +1,36 @@
+{
+  "name": "WikiSearch",
+  "version": "0.1.0",
+  "description": "RESTful API that provides search functionality for Github based repository wikis.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ccampanale/wikisearch-js"
+  },
+  "keywords": [
+    "github",
+    "wikis"
+  ],
+  "author": "Christopher Campanale",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ccampanale/wikisearch-js/issues"
+  },
+  "homepage": "https://github.com/ccampanale/wikisearch-js",
+  "scripts": {
+    "start": "node ./server/app"
+  },
+  "main": "server/app.js",
+  "dependencies": {
+    "express": "~4.0.0",
+    "mongoose": "~3.6.13",
+    "body-parser": "~1.0.1",
+    "git-grep": "~0.1.0",
+    "oauth-express": "~0.0.1",
+    "nodegit": "~0.11.0",
+    "clim": "~1.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-http": "^1.0.0"
+  }
+}
