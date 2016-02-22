@@ -1,7 +1,24 @@
 language: node_js
+
 node_js:
   - "4.2.1"
+
+os:
+  - linux
+  - osx
+
 before_script:
   - npm install -g mocha
-  - sudo apt-get install libstdc++6
-  - sudo apt-get dist-upgrade
+  - export CC=clang
+  - export CXX=clang++
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - build-essential
+      - libssl-dev
+      - gcc-4.9
+      - g++-4.9
+      - lcov
