@@ -4,3 +4,4 @@ node_js:
 before_script:
   - npm install -g mocha
   - sudo apt-get install libstdc++6
+  - sudo apt-get dist-upgrade

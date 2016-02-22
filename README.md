@@ -1,6 +1,8 @@
 WikiSearch-API
 ==============
 
+[![Build Status](https://travis-ci.org/ccampanale/wikisearch-js.svg?branch=master)](https://travis-ci.org/ccampanale/wikisearch-js)
+
 WikiSearch is a RESTful API written in NodeJS that provides search functionality for Github based repository wikis. It does this by locally cloning the repository wiki and allowing that repository to be updated and searched.
 
 **Note:** This project is working but still under heavy development. Use/deploy at your own risk!
