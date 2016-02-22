@@ -23,7 +23,7 @@ describe('v1.Repos', function() {
     it('should add a SINGLE repo on /v1/repos/:<repo_id> PUT', function(done) {
         chai.request(server)
         .put('/v1/repos/mocha_test_repo')
-        .query({name: 'mocha test repo', url: 'https://github.com/ccampanale/test-wiki', token: 'fa2e87414aa2f5986942c1ee7cab6f9b11ba246c'})
+        .query({name: 'mocha test repo', url: 'https://github.com/ccampanale/test-wiki', token: 'public_repo_no_token'})
         .end(function(err, res){
             res.should.have.status(200);
             res.should.be.json;
@@ -37,7 +37,7 @@ describe('v1.Repos', function() {
             res.body.mocha_test_repo.should.have.property('wiki_url');
             res.body.mocha_test_repo.id.should.equal('mocha_test_repo');
             res.body.mocha_test_repo.name.should.equal('mocha test repo');
-            res.body.mocha_test_repo.token.should.equal('fa2e87414aa2f5986942c1ee7cab6f9b11ba246c');
+            res.body.mocha_test_repo.token.should.equal('public_repo_no_token');
             res.body.mocha_test_repo.url.should.equal('https://github.com/ccampanale/test-wiki');
             res.body.mocha_test_repo.wiki_url.should.equal('https://github.com/ccampanale/test-wiki.wiki.git');
             done();
@@ -62,7 +62,7 @@ describe('v1.Repos', function() {
             res.body.name.should.equal('mocha test repo');
             res.body.url.should.equal('https://github.com/ccampanale/test-wiki');
             res.body.wiki_url.should.equal('https://github.com/ccampanale/test-wiki.wiki.git');
-            res.body.token.should.equal('fa2e87414aa2f5986942c1ee7cab6f9b11ba246c');
+            res.body.token.should.equal('public_repo_no_token');
             res.body.last_commit.should.be.a('object');
             res.body.last_commit.should.have.property('date');
             res.body.last_commit.should.have.property('author');
@@ -117,7 +117,7 @@ describe('v1.Repos', function() {
             res.body.name.should.equal('mocha test repo');
             res.body.url.should.equal('https://github.com/ccampanale/test-wiki');
             res.body.wiki_url.should.equal('https://github.com/ccampanale/test-wiki.wiki.git');
-            res.body.token.should.equal('fa2e87414aa2f5986942c1ee7cab6f9b11ba246c');
+            res.body.token.should.equal('public_repo_no_token');
             res.body.last_commit.should.be.a('object');
             res.body.last_commit.should.have.property('date');
             res.body.last_commit.should.have.property('author');
@@ -151,7 +151,7 @@ describe('v1.Repos', function() {
             res.body.name.should.equal('mocha test repo');
             res.body.url.should.equal('https://github.com/ccampanale/test-wiki');
             res.body.wiki_url.should.equal('https://github.com/ccampanale/test-wiki.wiki.git');
-            res.body.token.should.equal('fa2e87414aa2f5986942c1ee7cab6f9b11ba246c');
+            res.body.token.should.equal('public_repo_no_token');
             res.body.results.should.be.a('array');
             res.body.last_commit.should.be.a('object');
             res.body.last_commit.should.have.property('date');
