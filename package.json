@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/ccampanale/wikisearch-js",
   "scripts": {
-    "start": "node ./server/app"
+    "start": "node ./server/app",
+    "test": "mocha"
   },
   "main": "server/app.js",
   "dependencies": {
