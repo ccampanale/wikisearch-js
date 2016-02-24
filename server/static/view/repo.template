@@ -5,7 +5,7 @@
                             <p><%= url %></p>
                             <div class="split style1">
                                 <section>
-                                    <form method="get" action="#/repos/<%= repoID %>/">
+                                    <form method="get" action="#/repos/<%= repoID %>/search">
                                         <div class="field first">
                                             <label for="terms">Search for...</label>
                                             <input type="text" name="terms" id="terms" />

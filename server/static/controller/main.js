@@ -492,8 +492,6 @@
                     cancel:  false
                 }, function(view) {
 
-                    $('#' + repo).remove();
-
                     $('#alertLanding').empty();
                     $('#alertLanding').append(view);
 
