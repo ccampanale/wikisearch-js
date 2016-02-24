@@ -68,6 +68,11 @@
             };
             checkSubmit();
 
+            // set debounced url focusout function for other
+            var effUrlCheck = debounce(function(){
+                if($('#url').val() != '') $('#url').focusout();
+            }, 500);
+
             // setup url display
             $('#token').on('keyup', function(event){
 
@@ -77,6 +82,9 @@
 
                 // enable submit?
                 checkSubmit();
+
+                // check URL but not all the time...
+                effUrlCheck();
 
             });
 
@@ -99,10 +107,8 @@
                 // validate url
                 var new_url = $('#url').val();
 
-                // TODO: Add some sort of cool validation for url
-                // possibly using the Github API to see if the repo
-                // is public and requires a token or not. This would
-                // also require a bit of change to the backend too.
+                // ensure the url is present and not just a missclick
+                if(new_url == '') return;
 
                 var url_parts = new_url.split('/');
                 var url_prot = url_parts[0];
@@ -110,10 +116,24 @@
                 var url_uorg = url_parts[3];
                 var url_repo = url_parts[4];
 
+                // does the url point to public github? If not assume enterprise
                 var is_enterprise = ! (url_site.match(/github\.com/));
 
+                // if the url appears to be enterprise but no token has been set...
+                if(is_enterprise & $('#token').val() == ''){
+                    // no token has been supplied yet so just return to avoid unecessary calls
+                    $('#url_test').text(' (non-public address; add token)');
+                    return;
+                }
+
+                // set the correct api path if url is not for public github (assume enterprise)
                 var api_path = (is_enterprise) ? url_site + '/api/v3/' : 'api.' + url_site + '/';
+
+                // add the user/organization and repo information to the path
                 api_path = url_prot + '//' + api_path + 'repos/' + url_uorg + '/' + url_repo;
+
+                // add the token if the path is for enterprise
+                api_path = (is_enterprise) ? api_path + '?access_token=' + $('#token').val() : api_path;
 
                 $('#url_test').text('');
                 $('#url_test').removeClass('fa-square-o');
@@ -131,18 +151,63 @@
                         $('#url_test').removeClass('fa-spin');
                         $('#url_test').addClass('fa-check-square-o');
 
-                        if(!data.private){
-                            // require token
+                        console.log(data);
+
+                        if(!data.private & data.has_wiki){
+
+                            // disable token
                             $('#token_input').hide();
                             $('#repoToken').parent().hide();
                             $('#token').val('public_repo_no_token');
-                            $('#url_test').text(' (public repo)');
+                            $('#url_test').text('');
+                            $('#url_test').removeClass('bad');
+                            $('#url_test').addClass('good');
+                            $('#url').val(data.html_url);
+
+                        }else if(!data.public & !data.has_wiki){
+
+                            // repo doesn't have a wiki!
+                            $('#token_input').show();
+                            $('#repoToken').parent().show();
+                            $('#token').val('');
+                            $('#url_test').removeClass('fa-check-square-o');
+                            $('#url_test').addClass('fa-exclamation-triangle');
+                            $('#url_test').removeClass('good');
+                            $('#url_test').addClass('bad');
+                            $('#url_test').text(' (repo doesn\' have wiki!)');
+                            $('#url').val(data.html_url);
+
+                        }else if(data.private & is_enterprise & data.has_wiki){
+
+                            // token provides access but repo is private so we're good
+                            $('#url_test').text('');
+                            $('#url_test').removeClass('bad');
+                            $('#url_test').addClass('good');
+                            $('#url').val(data.html_url);
+
+                        }else if(data.private & is_enterprise & !data.has_wiki){
+
+                            // repo doesn't have a wiki!
+                            $('#token_input').show();
+                            $('#repoToken').parent().show();
+                            $('#token').val('');
+                            $('#url_test').removeClass('fa-check-square-o');
+                            $('#url_test').addClass('fa-exclamation-triangle');
+                            $('#url_test').removeClass('good');
+                            $('#url_test').addClass('bad');
+                            $('#url_test').text(' (repo doesn\' have wiki!)');
+                            $('#url').val(data.html_url);
+
                         }else{
-                            // disable token
+
+                            // require token
                             $('#token_input').show();
                             $('#repoToken').parent().show();
                             $('#token').val('');
                             $('#url_test').text('');
+                            $('#url_test').removeClass('bad');
+                            $('#url_test').addClass('good');
+
                         }
 
                     },
@@ -151,9 +216,12 @@
                         $('#url_test').removeClass('fa-spinner');
                         $('#url_test').removeClass('fa-spin');
                         $('#url_test').addClass('fa-exclamation-triangle');
+                        $('#url_test').removeClass('good');
+                        $('#url_test').addClass('bad');
                         $('#token_input').show();
                         $('#repoToken').parent().show();
-                        $('#token').val('');
+                        if($('#token').val() == 'public_repo_no_token')
+                            $('#token').val('');
                         $('#url_test').text(' (Can\'t find repo; check URL)');
                     },
                     complete: function() {

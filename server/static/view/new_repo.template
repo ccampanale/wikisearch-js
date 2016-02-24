@@ -2,7 +2,7 @@
                     <section id="newrepo_section" class="wrapper style1 fullscreen fade-up inactive">
                         <div class="inner">
                             <h2>Register new repo</h2>
-                            <p>Register a new repository from Github or Github Enterprise to enable searching that repository's wiki documentation. Simply provide a URL to the repo, an Oauth token with access to clone the repo and fetch updates, and a name to refernce the repo.</p>
+                            <p>Register a new repository from Github or Github Enterprise to enable searching that repository's wiki documentation. Simply provide a URL to the repo, an Oauth token with access to clone the repo and fetch updates if necessary (enterprise and private repos), and a name to refernce the repo.</p>
                             <div class="split style1">
                                 <section>
                                     <form method="post" action="#/newrepo">

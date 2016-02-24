@@ -4032,3 +4032,15 @@
 		    bottom: 5px;
 		    right: 5px;
 		}
+
+	#url_test {
+	    font-size: small;
+	}
+
+		.bad {
+			color: #FF6B6B;
+		}
+
+		.good {
+			color: #8DFF6B;
+		}
