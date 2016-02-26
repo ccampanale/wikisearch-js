@@ -82,7 +82,7 @@ api_router.route('/repos/:repo')
     };
 
     // ensure the repo file exists
-    var repo_exists = JSON.parse(fs.existsSync(repos_path + repo.id + '.json'));
+    var repo_exists = fs.existsSync(repos_path + repo.id + '.json');
     if(repo_exists){
 
       // open the associated repo file to get base information
@@ -174,7 +174,7 @@ api_router.route('/repos/:repo')
       }
 
       // ensure that the repo is not already registered
-      var repo_exists = JSON.parse(fs.existsSync(repos_path + new_repo.id + '.json'));
+      var repo_exists = fs.existsSync(repos_path + new_repo.id + '.json');
       if(!repo_exists){
 
         // create repos/<repo_id>.json
@@ -261,7 +261,7 @@ api_router.route('/repos/:repo')
     };
 
     // ensure the repo file exists
-    var repo_exists = JSON.parse(fs.existsSync(repos_path + repo.id + '.json'));
+    var repo_exists = fs.existsSync(repos_path + repo.id + '.json');
     if(repo_exists){
 
       // clean up repo file
@@ -316,7 +316,7 @@ api_router.route('/repos/:repo/search')
       };
 
       // ensure the repo file exists
-      var repo_exists = JSON.parse(fs.existsSync(repos_path + repo.id + '.json'));
+      var repo_exists = fs.existsSync(repos_path + repo.id + '.json');
       if(repo_exists){
 
         // open the associated repo file to get base information
@@ -387,7 +387,7 @@ api_router.route('/repos/:repo/update')
     };
 
     // ensure the repo file exists
-    var repo_exists = JSON.parse(fs.existsSync(repos_path + repo.id + '.json'));
+    var repo_exists = fs.existsSync(repos_path + repo.id + '.json');
     if(repo_exists){
 
       // open the associated repo file to get base information
@@ -464,7 +464,7 @@ api_router.route('/repos/:repo/updateAndSearch')
       };
 
       // ensure the repo file exists
-      var repo_exists = JSON.parse(fs.existsSync(repos_path + repo.id + '.json'));
+      var repo_exists = fs.existsSync(repos_path + repo.id + '.json');
       if(repo_exists){
 
         // open the associated repo file to get base information
