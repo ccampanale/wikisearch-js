@@ -50,7 +50,7 @@ api_router.route('/repos')
         res.status(500);
         var response = { success: false, status: 'error getting reading all repos' };
         res.json(response);
-        console.error(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+        console.error(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
       }
 
       // otherwise create a structured response of repos
@@ -65,7 +65,7 @@ api_router.route('/repos')
       // respond
       var response = cloned_repos;
       res.json(response);
-      console.info(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+      console.info(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
     });
 
@@ -103,7 +103,7 @@ api_router.route('/repos/:repo')
 
           var response = repo;
           res.json(response);
-          console.info(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+          console.info(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
         });
 
@@ -114,7 +114,7 @@ api_router.route('/repos/:repo')
         res.status(500);
         var response = { success: false, status: 'error getting repo information' };
         res.json(response);
-        console.error(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+        console.error(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
       });
 
@@ -124,11 +124,11 @@ api_router.route('/repos/:repo')
         res.status(404);
         var response = { success: false, status: 'not found' };
         res.json(response);
-        console.warn(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+        console.warn(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
     }
 
-    // res.json({ json: true, route: '/:repo', method: 'get', params: req.params, query: req.query });
+    // res.json({ json: true, route: '/:repo', method: 'get', params: req.params, query: req.query, body: req.body });
   })
 
   .put(function(req, res) {
@@ -136,13 +136,16 @@ api_router.route('/repos/:repo')
     var console = clim("(PUT /v1/repos/:repo):", logger);
 
     // check required params
-    if(req.params['repo'] && req.query['name'] && req.query['url'] && req.query['token']){
+    if(req.params['repo'] &&
+       ((req.query['name'] && req.query['url'] && req.query['token']) ||
+        (req.body.name && req.body.url && req.body.token))
+      ){
 
       var new_repo = {
         id:    req.params['repo'],
-        name:  req.query['name'],
-        url:   req.query['url'],
-        token: req.query['token']
+        name:  req.query['name']  || req.body.name,
+        url:   req.query['url']   || req.body.url,
+        token: req.query['token'] || req.body.token
       };
       //console.log(new_repo);
 
@@ -186,7 +189,7 @@ api_router.route('/repos/:repo')
             res.status(500);
             var response = { success: false, status: 'error creating filesystem object' };
             res.json(response);
-            console.error(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: err }));
+            console.error(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: err }));
 
           }else{
 
@@ -210,7 +213,7 @@ api_router.route('/repos/:repo')
               var response = {};
               response[new_repo.id] = new_repo;
               res.json(response);
-              console.info(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+              console.info(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
             },function(err){
 
@@ -221,7 +224,7 @@ api_router.route('/repos/:repo')
                 res.status(500);
                 var response = { success: false, status: 'error cloneing repository' };
                 res.json(response);
-                console.error(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: err }));
+                console.error(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: err }));
 
               });
 
@@ -237,7 +240,7 @@ api_router.route('/repos/:repo')
         res.status(400);
         var response = { success: false, status: 'object already exists' };
         res.json(response);
-        console.warn(JSON.stringify({ request: { params: req.params, query: req.query }, response: response }));
+        console.warn(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response }));
 
       }
 
@@ -246,7 +249,7 @@ api_router.route('/repos/:repo')
       res.status(400);
       var response = { success: false, status: 'missing parameters' };
       res.json(response);
-      console.warn(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+      console.warn(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
     }
 
@@ -286,7 +289,7 @@ api_router.route('/repos/:repo')
         // return a delete confirmation
         var response = { success: true, status: 'repo deleted' };
         res.json(response);
-        console.info(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: err }));
+        console.info(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: err }));
 
       });
 
@@ -296,7 +299,7 @@ api_router.route('/repos/:repo')
       res.status(404);
       var response = { success: false, status: 'not found' };
       res.json(response);
-      console.warn(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+      console.warn(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
     }
 
@@ -309,7 +312,8 @@ api_router.route('/repos/:repo/search')
     var console = clim("(POST /v1/repos/:repo/search):", logger);
 
     // check required params
-    if(req.params['repo'] && req.query['terms']){
+    if(req.params['repo'] &&
+       (req.query['terms'] || req.body.terms)){
 
       var repo = {
         id: req.params['repo']
@@ -321,7 +325,7 @@ api_router.route('/repos/:repo/search')
 
         // open the associated repo file to get base information
         var repo_file = JSON.parse(fs.readFileSync(repos_path + repo.id + '.json', 'utf8'));
-        repo_file.terms = req.query['terms'];
+        repo_file.terms = req.query['terms'] || req.body.terms;
         repo_file.results = [];
 
         // search for the terms in the repo
@@ -342,7 +346,7 @@ api_router.route('/repos/:repo/search')
           res.status(500);
           var response = { success: false, status: 'error searching repository' };
           res.json(response);
-          console.error(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: err }));
+          console.error(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: err }));
 
         }).on('end', function() {
 
@@ -350,7 +354,7 @@ api_router.route('/repos/:repo/search')
           var response = repo_file;
           res.json(response);
           response.results = "[.." + response.results.length + " results returned..]";
-          console.info(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+          console.info(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
         });
 
@@ -361,7 +365,7 @@ api_router.route('/repos/:repo/search')
         res.status(404);
         var response = { success: false, status: 'not found' };
         res.json(response);
-        console.warn(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+        console.warn(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
       }
 
@@ -370,7 +374,7 @@ api_router.route('/repos/:repo/search')
       res.status(400);
       var response = { success: false, status: 'missing parameters' };
       res.json(response);
-      console.warn(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+      console.warn(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
     }
 
@@ -404,7 +408,7 @@ api_router.route('/repos/:repo/update')
             res.status(500);
             var response = { success: false, status: 'error updating git repo' };
             res.json(response);
-            console.error(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: err }));
+            console.error(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: err }));
 
           }else{
 
@@ -414,7 +418,7 @@ api_router.route('/repos/:repo/update')
               res.status(500);
               var response = { success: false, status: 'error updating repository' };
               res.json(response);
-              console.error(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: err }));
+              console.error(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: err }));
 
             }).then(function(commit) {
 
@@ -428,7 +432,7 @@ api_router.route('/repos/:repo/update')
 
               var response = repo_file;
               res.json(response);
-              console.info(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+              console.info(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
             });
 
@@ -444,7 +448,7 @@ api_router.route('/repos/:repo/update')
       res.status(404);
       var response = { success: false, status: 'not found' };
       res.json(response);
-      console.warn(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+      console.warn(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
     }
 
@@ -457,7 +461,8 @@ api_router.route('/repos/:repo/updateAndSearch')
     var console = clim("(POST /v1/repos/:repo/updateAndSearch):", logger);
 
     // check required params
-    if(req.params['repo'] && req.query['terms']){
+    if(req.params['repo'] &&
+       (req.query['terms'] || req.body.terms)){
 
       var repo = {
         id:       req.params['repo']
@@ -469,7 +474,7 @@ api_router.route('/repos/:repo/updateAndSearch')
 
         // open the associated repo file to get base information
         var repo_file = JSON.parse(fs.readFileSync(repos_path + repo.id + '.json', 'utf8'));
-        repo_file.terms = req.query['terms'];
+        repo_file.terms = req.query['terms'] || req.body.terms;
         repo_file.results = [];
 
         // open local repo
@@ -483,7 +488,7 @@ api_router.route('/repos/:repo/updateAndSearch')
             res.status(500);
             var response = { success: false, status: 'error updating git repo' };
             res.json(response);
-            console.error(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: err }));
+            console.error(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: err }));
 
           }else{
 
@@ -494,7 +499,7 @@ api_router.route('/repos/:repo/updateAndSearch')
               res.status(500);
               var response = { success: false, status: 'error updating repository' };
               res.json(response);
-              console.error(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: err }));
+              console.error(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: err }));
 
               }).then(function(commit) {
 
@@ -524,7 +529,7 @@ api_router.route('/repos/:repo/updateAndSearch')
                   res.status(500);
                   var response = { success: false, status: 'error searching repository' };
                   res.json(response);
-                  console.error(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: err }));
+                  console.error(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: err }));
 
                 }).on('end', function() {
 
@@ -532,7 +537,7 @@ api_router.route('/repos/:repo/updateAndSearch')
                   var response = repo_file;
                   res.json(response);
                   response.results = "[.." + response.results.length + " results returned..]";
-                  console.info(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+                  console.info(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
                 });
 
@@ -550,7 +555,7 @@ api_router.route('/repos/:repo/updateAndSearch')
         res.status(404);
         var response = { success: false, status: 'not found' };
         res.json(response);
-        console.warn(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+        console.warn(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
       }
 
@@ -559,7 +564,7 @@ api_router.route('/repos/:repo/updateAndSearch')
       res.status(400);
       var response = { success: false, status: 'missing parameters' };
       res.json(response);
-      console.warn(JSON.stringify({ request: { params: req.params, query: req.query }, response: response, error: null }));
+      console.warn(JSON.stringify({ request: { params: req.params, query: req.query, body: req.body }, response: response, error: null }));
 
     }
 

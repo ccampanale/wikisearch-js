@@ -19,8 +19,8 @@ describe('v1.Repos', function() {
         });
     });
 
-    // add a new test repo
-    it('should add a SINGLE repo on /v1/repos/:repo_id PUT', function(done) {
+    // add a new test repo using query
+    it('should add a SINGLE repo on /v1/repos/:repo_id PUT (query)', function(done) {
         chai.request(server)
         .put('/v1/repos/mocha_test_repo')
         .query({name: 'mocha test repo', url: 'https://github.com/ccampanale/test-wiki', token: 'public_repo_no_token'})
@@ -40,6 +40,31 @@ describe('v1.Repos', function() {
             res.body.mocha_test_repo.token.should.equal('public_repo_no_token');
             res.body.mocha_test_repo.url.should.equal('https://github.com/ccampanale/test-wiki');
             res.body.mocha_test_repo.wiki_url.should.equal('https://github.com/ccampanale/test-wiki.wiki.git');
+            done();
+        });
+    });
+
+     // add a new test repo using post params
+    it('should add a SINGLE repo on /v1/repos/:repo_id PUT (body)', function(done) {
+        chai.request(server)
+        .put('/v1/repos/mocha_test_repo2')
+        .send({name: 'mocha test repo 2', url: 'https://github.com/ccampanale/test-wiki', token: 'public_repo_no_token'})
+        .end(function(err, res){
+            res.should.have.status(200);
+            res.should.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('mocha_test_repo2');
+            res.body.mocha_test_repo2.should.be.a('object');
+            res.body.mocha_test_repo2.should.have.property('id');
+            res.body.mocha_test_repo2.should.have.property('name');
+            res.body.mocha_test_repo2.should.have.property('token');
+            res.body.mocha_test_repo2.should.have.property('url');
+            res.body.mocha_test_repo2.should.have.property('wiki_url');
+            res.body.mocha_test_repo2.id.should.equal('mocha_test_repo2');
+            res.body.mocha_test_repo2.name.should.equal('mocha test repo 2');
+            res.body.mocha_test_repo2.token.should.equal('public_repo_no_token');
+            res.body.mocha_test_repo2.url.should.equal('https://github.com/ccampanale/test-wiki');
+            res.body.mocha_test_repo2.wiki_url.should.equal('https://github.com/ccampanale/test-wiki.wiki.git');
             done();
         });
     });
@@ -74,7 +99,7 @@ describe('v1.Repos', function() {
         });
     });
 
-    // search the test repo
+    // search the test repos
     it('should return a object with a list of search results for repo on /v1/repos/:repo_id/search POST', function(done) {
         chai.request(server)
         .post('/v1/repos/mocha_test_repo/search')
@@ -98,7 +123,30 @@ describe('v1.Repos', function() {
         });
     });
 
-    // update the test repo
+    it('should return a object with a list of search results for repo on /v1/repos/:repo_id/search POST', function(done) {
+        chai.request(server)
+        .post('/v1/repos/mocha_test_repo2/search')
+        .send({terms: 'codeblock'})
+        .end(function(err, res){
+            res.should.have.status(200);
+            res.should.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('id');
+            res.body.should.have.property('name');
+            res.body.should.have.property('terms');
+            res.body.should.have.property('results');
+            res.body.results.should.be.a('array');
+            res.body.results[0].should.be.a('object');
+            res.body.results[0].should.have.property('file');
+            res.body.results[0].should.have.property('line');
+            res.body.results[0].should.have.property('text');
+            res.body.results[0].should.have.property('href');
+            res.body.results[0].should.have.property('href_raw');
+            done();
+        });
+    });
+
+    // update the test repos
     it('should return a SINGLE updated repo on /v1/repos/:repo_id/update POST', function(done) {
         chai.request(server)
         .post('/v1/repos/mocha_test_repo/update')
@@ -129,7 +177,7 @@ describe('v1.Repos', function() {
         });
     });
 
-    // searchAndUpdate the test rep
+    // searchAndUpdate the test repos
     it('should return a SINGLE updated repo with an array of search results on /v1/repos/:repo_id/updateAndSearch POST', function(done) {
         chai.request(server)
         .post('/v1/repos/mocha_test_repo/updateAndSearch')
@@ -164,10 +212,61 @@ describe('v1.Repos', function() {
         });
     });
 
-    // delete the test repo
+    it('should return a SINGLE updated repo with an array of search results on /v1/repos/:repo_id/updateAndSearch POST (body)', function(done) {
+        chai.request(server)
+        .post('/v1/repos/mocha_test_repo/updateAndSearch')
+        .send({terms: 'codeblock'})
+        .end(function(err, res){
+            res.should.have.status(200);
+            res.should.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('id');
+            res.body.should.have.property('name');
+            res.body.should.have.property('url');
+            res.body.should.have.property('wiki_url');
+            res.body.should.have.property('token');
+            res.body.should.have.property('datetime');
+            res.body.should.have.property('last_commit');
+            res.body.should.have.property('terms');
+            res.body.should.have.property('results');
+            res.body.id.should.equal('mocha_test_repo');
+            res.body.name.should.equal('mocha test repo');
+            res.body.url.should.equal('https://github.com/ccampanale/test-wiki');
+            res.body.wiki_url.should.equal('https://github.com/ccampanale/test-wiki.wiki.git');
+            res.body.token.should.equal('public_repo_no_token');
+            res.body.results.should.be.a('array');
+            res.body.last_commit.should.be.a('object');
+            res.body.last_commit.should.have.property('date');
+            res.body.last_commit.should.have.property('author');
+            res.body.last_commit.should.have.property('message');
+            res.body.last_commit.date.should.be.a('string');
+            res.body.last_commit.author.should.be.a('string');
+            res.body.last_commit.message.should.be.a('string');
+            done();
+        });
+    });
+
+    // delete the test repos
     it('should delete a SINGLE repo on /v1/repos/:repo_id DELETE', function(done) {
+        // delete the query repo
         chai.request(server)
         .delete('/v1/repos/mocha_test_repo')
+        .end(function(err, res){
+            res.should.have.status(200);
+            res.should.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('success');
+            res.body.should.have.property('status');
+            res.body.success.should.equal(true);
+            res.body.status.should.equal('repo deleted');
+            done();
+        });
+    });
+
+    it('should delete a SINGLE repo on /v1/repos/:repo_id DELETE', function(done) {
+        // delete the post params repo
+        chai.request(server)
+        .delete('/v1/repos/mocha_test_repo2')
         .end(function(err, res){
             res.should.have.status(200);
             res.should.be.json;

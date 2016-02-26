@@ -40,10 +40,10 @@ $ mocha --timeout 10000       # cloneing, fetching, etc. can take time so a high
 Todo
 ----
 
-  - add proper configuration capabiltiies
+  - ~~add proper configuration capabiltiies~~
   - enhance regular expressions in `PUT /v1/repos/:repo` route
   - ~~break out routes from `app.js` to a `server/routes/` directory~~
-  - include optional params from body instead of just from req.query
+  - ~~include optional params from body instead of just from req.query~~
   - include Github oauth integration for UI
     - This currently only handled by doing checks against the Github/Enterprise API to validate the repo and token provided. No oauth authorizeation/generation is handled in the UI.
   - UI reactive design enhancements
