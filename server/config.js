@@ -41,6 +41,8 @@ var config = {};
 // All config options will be pulled in the order:
 // file_config -> process environment -> default setting
 
+config.debug = process.env.DEBUG || false;
+
 // server settings
 config.server = {};
 config.server.port = process.env.PORT || 3000;

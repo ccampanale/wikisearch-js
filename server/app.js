@@ -18,6 +18,11 @@ app.use(bodyParser.json());
 // pass config to express app
 app.config = config;
 
+// check and warn for debug mode
+if(app.config.debug){
+  console.warn('DEBUG ON');
+}
+
 // pass config to routes
 app.use(function(req,res,next){
   req.config = config;
