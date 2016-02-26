@@ -50,6 +50,7 @@ Todo
   - add some authentication/authorization capability (ACLs, LDAP, etc.)
   - better error handling
   - code restructoring to clean some things up
+    - ~~clean up logging using debug setting~~
   - expand tests
 
 

@@ -12,6 +12,9 @@ var clim       = require('clim');
 var logger    = clim("[WikiSearch-"+pjson.version+"]");
 var console   = clim("(SERVER):", logger);
 
+// load helper functions
+app.helpers = require('./lib/helpers');
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -23,9 +26,10 @@ if(app.config.debug){
   console.warn('DEBUG ON');
 }
 
-// pass config to routes
+// pass config and helpers to routes
 app.use(function(req,res,next){
-  req.config = config;
+  req.config = app.config;
+  req.helpers = app.helpers;
   next();
 });
 
