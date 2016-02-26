@@ -20,7 +20,7 @@ describe('v1.Repos', function() {
     });
 
     // add a new test repo
-    it('should add a SINGLE repo on /v1/repos/:<repo_id> PUT', function(done) {
+    it('should add a SINGLE repo on /v1/repos/:repo_id PUT', function(done) {
         chai.request(server)
         .put('/v1/repos/mocha_test_repo')
         .query({name: 'mocha test repo', url: 'https://github.com/ccampanale/test-wiki', token: 'public_repo_no_token'})
@@ -45,7 +45,7 @@ describe('v1.Repos', function() {
     });
 
     // get information on the test repo
-    it('should list a SINGLE repo on /v1/repos/:<repo_id> GET', function(done) {
+    it('should list a SINGLE repo on /v1/repos/:repo_id GET', function(done) {
         chai.request(server)
         .get('/v1/repos/mocha_test_repo')
         .end(function(err, res){
@@ -75,7 +75,7 @@ describe('v1.Repos', function() {
     });
 
     // search the test repo
-    it('should return a object with a list of search results for repo on /v1/repos/:<repo_id>/search POST', function(done) {
+    it('should return a object with a list of search results for repo on /v1/repos/:repo_id/search POST', function(done) {
         chai.request(server)
         .post('/v1/repos/mocha_test_repo/search')
         .query({terms: 'codeblock'})
@@ -99,7 +99,7 @@ describe('v1.Repos', function() {
     });
 
     // update the test repo
-    it('should return a SINGLE updated repo on /v1/repos/:<repo_id>/update POST', function(done) {
+    it('should return a SINGLE updated repo on /v1/repos/:repo_id/update POST', function(done) {
         chai.request(server)
         .post('/v1/repos/mocha_test_repo/update')
         .end(function(err, res){
@@ -130,7 +130,7 @@ describe('v1.Repos', function() {
     });
 
     // searchAndUpdate the test rep
-    it('should return a SINGLE updated repo with an array of search results on /v1/repos/:<repo_id>/updateAndSearch POST', function(done) {
+    it('should return a SINGLE updated repo with an array of search results on /v1/repos/:repo_id/updateAndSearch POST', function(done) {
         chai.request(server)
         .post('/v1/repos/mocha_test_repo/updateAndSearch')
         .query({terms: 'codeblock'})
@@ -165,7 +165,7 @@ describe('v1.Repos', function() {
     });
 
     // delete the test repo
-    it('should delete a SINGLE repo on /v1/repos/:<repo_id> DELETE', function(done) {
+    it('should delete a SINGLE repo on /v1/repos/:repo_id DELETE', function(done) {
         chai.request(server)
         .delete('/v1/repos/mocha_test_repo')
         .end(function(err, res){

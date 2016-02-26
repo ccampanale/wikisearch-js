@@ -18,7 +18,7 @@
   "homepage": "https://github.com/ccampanale/wikisearch-js",
   "scripts": {
     "start": "node ./server/app",
-    "test": "mocha"
+    "test": "mocha --timeout 10000"
   },
   "main": "server/app.js",
   "dependencies": {

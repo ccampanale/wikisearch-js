@@ -15,7 +15,7 @@ console.info('Loading configuration');
 
 // Conditionally import a config file that may be at the root of the project
 var config_exists = fs.existsSync('config.json');
-console.log(config_exists);
+
 if(config_exists){
 
     // found a config file
