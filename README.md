@@ -13,11 +13,11 @@ Installation
 Clone repo locally, `npm install`, then run server at `./server/app.js`.
 
 ```bash
-mkdir wikisearch
-git clone https://github.com/ccampanale/wikisearch-js wikisearch
-cd wikisearch
-npm install
-node server/app.js
+$ mkdir wikisearch
+$ git clone https://github.com/ccampanale/wikisearch-js wikisearch
+$ cd wikisearch
+$ npm install
+$ npm start                    # for more verbose set DEBUG: $ DEBUG=true npm start
 ```
 
 API routes can be listed at `http://localhost:3000/v1/` and the UI is available over `http://localhost:3000/ui/` (server will forward to `/ui/` for requests at the root).
@@ -34,7 +34,7 @@ Tests are done using **Mocha** which is expected to be installed globally:
 
 ```bash
 $ npm install -g mocha@2.3.1
-$ mocha --timeout 10000       # cloneing, fetching, etc. can take time so a higher timeout is good here
+$ npm test                    # for more verbose set DEBUG: $ DEBUG=true npm test
 ```
 
 Todo
@@ -52,6 +52,7 @@ Todo
   - code restructoring to clean some things up
     - ~~clean up logging using debug setting~~
   - expand tests
+    - include some failure tests to ensure bad route requests are appropriately handled
 
 
 Authors
@@ -70,5 +71,9 @@ Change Log
 ----------
 
   - ***[master/head]***
+  - **v0.1.1**
     - UI enchancements/bug fixes
+    - Adds ability to optionally read configuration from `config.json` file
+    - Adds `DEBUG` setting: `DEBUG=true npm start`
+    - Adds `PORT` setting
   - **v0.1.0** - First beta release
