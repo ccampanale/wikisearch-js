@@ -75,6 +75,8 @@ Change Log
 ----------
 
   - ***[master/head]***
+  - **v0.1.2**
+    - Adds `REPO_PATH` setting to configure where repos are cloned and managed.
   - **v0.1.1**
     - UI enchancements/bug fixes
     - Adds ability to optionally read configuration from `config.json` file
