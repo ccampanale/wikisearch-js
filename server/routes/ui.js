@@ -11,7 +11,7 @@ var ui_router = express.Router();
 
 ui_router.get('/', function(req, res) {
   var console   = clim("(GET /):", logger);
-  logger.info(JSON.stringify({ request: '/', response: {redirect: '/ui/#', status: 301}, error: null }));
+  console.info(JSON.stringify({ request: '/', response: {redirect: '/ui/#', status: 301}, error: null }));
   res.redirect(301, '/ui/#');
 });
 

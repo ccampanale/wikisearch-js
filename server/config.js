@@ -47,7 +47,21 @@ config.debug = process.env.DEBUG || false;
 config.server = {};
 config.server.port = process.env.PORT || 3000;
 
-/* config test stuff
+// repos settings
+config.repos = {};
+config.repos.path = process.env.REPOS_PATH || 'server/repos/';
+try {
+    var pathStat = fs.statSync(config.repos.path);
+    if(!pathStat.isDirectory()){
+        console.error('Provided <config.repos.path> is not a directory; defaulting to \'server/repos/\'');
+	config.repos.path = 'server/repos/';
+    }
+} catch (e) {
+    console.error('Error checking provided <config.repos.path>; defaulting to \'server/repos/\'');
+    config.repos.path = 'server/repos/';
+}
+
+/* example config test settings
 config.test = {};
 config.test.setting = true;
 config.test.sub_settings = {};

@@ -25,7 +25,11 @@ API routes can be listed at `http://localhost:3000/v1/` and the UI is available 
 Configuration
 -------------
 
-Other than the server port, there is no special configuration as this time but I intend to add configuration options in the future. The port can be set by setting the environment variable `PORT=<port>`.
+Configuration can be done via environment variables or a local `config.json` file in the root of the project. The following configuration items can be configured:
+
+  - `config.debug` (environment: `DEBUG`): true or false to debug requests
+  - `config.server.port` (environment: `PORT`): the port the application is to run on.
+  - `config.repos.path` (environment: `REPO_PATH`): the path to where repos should be cloned and manged.
 
 Tests
 -----

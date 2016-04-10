@@ -16,8 +16,6 @@ var logger    = clim("[WikiSearch-"+pjson.version+"]");
 
 var api_router = express.Router();
 
-var repos_path = 'server/repos/';
-
 api_router.route('/')
 
   .get(function(req, res) {
@@ -43,7 +41,7 @@ api_router.route('/repos')
 
     var console = clim("(GET /v1/repos):", logger);
 
-    fs.readdir(repos_path,function(err, files){
+    fs.readdir(req.config.repos.path,function(err, files){
 
       // return error if there was a problem reading all the repos
       if (err) {
@@ -57,7 +55,7 @@ api_router.route('/repos')
       var cloned_repos = [];
       files.forEach( function (file){
         if( /.\.json/.test(file) ) {
-          var obj = JSON.parse(fs.readFileSync(repos_path + file, 'utf8'));
+          var obj = JSON.parse(fs.readFileSync(path.join(req.config.repos.path, file), 'utf8'));
           cloned_repos.push(obj);
         }
       });
@@ -82,14 +80,14 @@ api_router.route('/repos/:repo')
     };
 
     // ensure the repo file exists
-    var repo_exists = fs.existsSync(repos_path + repo.id + '.json');
+    var repo_exists = fs.existsSync(path.join(req.config.repos.path, repo.id) + '.json');
     if(repo_exists){
 
       // open the associated repo file to get base information
-      var repo = JSON.parse(fs.readFileSync(repos_path + repo.id + '.json', 'utf8'));
+      var repo = JSON.parse(fs.readFileSync(path.join(req.config.repos.path, repo.id) + '.json', 'utf8'));
 
       // open the associated repo and get head and last commit info; add to obj
-      git.Repository.open(path.resolve(repos_path + repo.id)).then(function (gitrepo) {
+      git.Repository.open(path.resolve(path.join(req.config.repos.path, repo.id))).then(function (gitrepo) {
 
         // return repo information
         gitrepo.getHeadCommit().then(function(commit) {
@@ -177,11 +175,11 @@ api_router.route('/repos/:repo')
       }
 
       // ensure that the repo is not already registered
-      var repo_exists = fs.existsSync(repos_path + new_repo.id + '.json');
+      var repo_exists = fs.existsSync(path.join(req.config.repos.path, new_repo.id) + '.json');
       if(!repo_exists){
 
         // create repos/<repo_id>.json
-        fs.writeFile(repos_path + new_repo.id + '.json', JSON.stringify(new_repo),  function(err) {
+        fs.writeFile(path.join(req.config.repos.path, new_repo.id) + '.json', JSON.stringify(new_repo),  function(err) {
 
           // error writing filesystem object?
           if (err) {
@@ -206,7 +204,7 @@ api_router.route('/repos/:repo')
             }
 
             // clone repo
-            git.Clone(new_repo.wiki_url, repos_path + new_repo.id, cloneOptions)
+            git.Clone(new_repo.wiki_url, path.join(req.config.repos.path, new_repo.id), cloneOptions)
             .then(function(repository) {
 
               // Work with the repository object here.
@@ -218,7 +216,7 @@ api_router.route('/repos/:repo')
             },function(err){
 
               // clean up repo file
-              fs.unlink(repos_path + new_repo.id + '.json', function(err) {
+              fs.unlink(path.join(req.config.repos.path, new_repo.id) + '.json', function(err) {
 
                 // return error response
                 res.status(500);
@@ -264,27 +262,27 @@ api_router.route('/repos/:repo')
     };
 
     // ensure the repo file exists
-    var repo_exists = fs.existsSync(repos_path + repo.id + '.json');
+    var repo_exists = fs.existsSync(path.join(req.config.repos.path, repo.id) + '.json');
     if(repo_exists){
 
       // clean up repo file
-      fs.unlink(repos_path + repo.id + '.json', function(err) {
+      fs.unlink(path.join(req.config.repos.path, repo.id) + '.json', function(err) {
 
-        var path = repos_path + repo.id;
-        var deleteFolderRecursive = function(path) {
-          if( fs.existsSync(path) ) {
-            fs.readdirSync(path).forEach(function(file,index){
-              var curPath = path + "/" + file;
+        var delpath = path.join(req.config.repos.path, repo.id);
+        var deleteFolderRecursive = function(delpath) {
+          if( fs.existsSync(delpath) ) {
+            fs.readdirSync(delpath).forEach(function(file,index){
+              var curPath = delpath + "/" + file;
               if(fs.lstatSync(curPath).isDirectory()) { // recurse
                 deleteFolderRecursive(curPath);
               } else { // delete file
                 fs.unlinkSync(curPath);
               }
             });
-            fs.rmdirSync(path);
+            fs.rmdirSync(delpath);
           }
         };
-        deleteFolderRecursive(path);
+        deleteFolderRecursive(delpath);
 
         // return a delete confirmation
         var response = { success: true, status: 'repo deleted' };
@@ -320,16 +318,16 @@ api_router.route('/repos/:repo/search')
       };
 
       // ensure the repo file exists
-      var repo_exists = fs.existsSync(repos_path + repo.id + '.json');
+      var repo_exists = fs.existsSync(path.join(req.config.repos.path, repo.id) + '.json');
       if(repo_exists){
 
         // open the associated repo file to get base information
-        var repo_file = JSON.parse(fs.readFileSync(repos_path + repo.id + '.json', 'utf8'));
+        var repo_file = JSON.parse(fs.readFileSync(path.join(req.config.repos.path, repo.id) + '.json', 'utf8'));
         repo_file.terms = req.query['terms'] || req.body.terms;
         repo_file.results = [];
 
         // search for the terms in the repo
-        gitGrep(path.resolve(repos_path + repo.id + '/.git'), {
+        gitGrep(path.resolve(path.join(req.config.repos.path, repo.id) + '/.git'), {
           rev: 'HEAD',
           term: repo_file.terms
         }).on('data', function(data) {
@@ -391,14 +389,14 @@ api_router.route('/repos/:repo/update')
     };
 
     // ensure the repo file exists
-    var repo_exists = fs.existsSync(repos_path + repo.id + '.json');
+    var repo_exists = fs.existsSync(path.join(req.config.repos.path, repo.id) + '.json');
     if(repo_exists){
 
       // open the associated repo file to get base information
-      var repo_file = JSON.parse(fs.readFileSync(repos_path + repo.id + '.json', 'utf8'));
+      var repo_file = JSON.parse(fs.readFileSync(path.join(req.config.repos.path, repo.id) + '.json', 'utf8'));
 
       // open local repo
-      git.Repository.open(path.resolve(repos_path + repo.id)).then(function(repository) {
+      git.Repository.open(path.resolve(path.join(req.config.repos.path, repo.id))).then(function(repository) {
 
         // synchronously update the repo
         repository.fetchAll({}, function(err){
@@ -469,16 +467,16 @@ api_router.route('/repos/:repo/updateAndSearch')
       };
 
       // ensure the repo file exists
-      var repo_exists = fs.existsSync(repos_path + repo.id + '.json');
+      var repo_exists = fs.existsSync(path.join(req.config.repos.path, repo.id) + '.json');
       if(repo_exists){
 
         // open the associated repo file to get base information
-        var repo_file = JSON.parse(fs.readFileSync(repos_path + repo.id + '.json', 'utf8'));
+        var repo_file = JSON.parse(fs.readFileSync(path.join(req.config.repos.path, repo.id) + '.json', 'utf8'));
         repo_file.terms = req.query['terms'] || req.body.terms;
         repo_file.results = [];
 
         // open local repo
-        git.Repository.open(path.resolve(repos_path + repo.id)).then(function(repository) {
+        git.Repository.open(path.resolve(path.join(req.config.repos.path, repo.id))).then(function(repository) {
 
         // synchronously update the repo
         repository.fetchAll({}, function(err){
@@ -512,7 +510,7 @@ api_router.route('/repos/:repo/updateAndSearch')
                 };
 
                 // search for the terms in the repo
-                gitGrep(path.resolve(repos_path + repo.id + '/.git'), {
+                gitGrep(path.resolve(path.join(req.config.repos.path, repo.id) + '/.git'), {
                   rev: 'HEAD',
                   term: repo_file.terms
                 }).on('data', function(data) {
