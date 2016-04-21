@@ -1,0 +1,27 @@
+{
+  "services": [
+    {
+      "name": "app",
+      "container_ports": [
+        {
+          "protocol": "tcp",
+          "inner_port": 3000,
+          "published": true,
+          "outer_port": 3507
+        }
+      ],
+      "container_envvars": [
+        {
+          "key": "NODE_ENV",
+          "value": "production"
+        }
+      ],
+      "image": "",
+      "target_num_containers": 1,
+      "sequential_deployment": true,
+      "autorestart": "ALWAYS",
+      "autoredeploy": true
+    }
+  ],
+  "name": "ccampanalewikisearch-js"
+}
